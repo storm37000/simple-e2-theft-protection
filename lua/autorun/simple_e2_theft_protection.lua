@@ -5,14 +5,16 @@
 -- 01/01/2015
 
 -- Available wire_expression2_theft_protection convar settings:
--- 0 = Disabled. Everyone can steal your E2s if the prop protection mod allows it.
--- 1 = Enabled. Only people on your Prop Protection friends list can take your code. (NOTE: Some prop protection mods will add all admins to your PP friends list at all times)
--- 2 = Enabled. Only super admins can take your code. (DEFAULT MODE)
--- 3 = Enabled. Nobody can take your code (except admins with access to Lua commands, they still can).
+local helptxt = [[
+	0 = Disabled. Everyone can steal your E2s if the prop protection mod allows it.
+	1 = Enabled. Only people on your Prop Protection friends list can take your code. (NOTE: Some prop protection mods will add all admins to your PP friends list at all times)
+	2 = Enabled. Only super admins can take your code.
+	3 = Enabled. Nobody can take your code (except admins with access to Lua commands, they still can).
+]]
 -------------------------------------------------------
 
 if CLIENT then
-	CreateClientConVar( "wire_expression2_theft_protection", 2, true, true )
+	CreateClientConVar( "wire_expression2_theft_protection", 1, true, true, helptxt, 0, 3 )
 else
 	AddCSLuaFile()
 	
@@ -85,12 +87,11 @@ else
 		end
 	end
 
-	hook.Add( "CanTool","simple_e2_theft_protection", function( ... )
-		if not CPPI then
-			hook.Remove( "CanTool", "simple_e2_theft_protection" )
-			error( "Simple E2 Theft Protection unable to load: CPPI required." )
-		end
-		
-		return check( ... )
-	end)
+	if CPPI then
+		hook.Add( "CanTool","simple_e2_theft_protection", function( ... )
+			return check( ... )
+		end)
+	else
+		error( "Simple E2 Theft Protection unable to load: CPPI required." )
+	end
 end
