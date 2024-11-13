@@ -88,9 +88,7 @@ else
 	end
 
 	if CPPI then
-		hook.Add( "CanTool","simple_e2_theft_protection", function( ... )
-			return check( ... )
-		end)
+		hook.Add( "CanTool","simple_e2_theft_protection", check)
 	else
 		error( "Simple E2 Theft Protection unable to load: CPPI required." )
 	end
