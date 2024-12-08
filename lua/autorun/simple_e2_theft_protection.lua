@@ -42,13 +42,10 @@ else
 				local entity = entities[i]
 				if entity:GetClass() == "gmod_wire_expression2" then
 					local owner = entity:CPPIGetOwner()
-					
-					local mode = owner:GetInfoNum( "wire_expression2_theft_protection", 2 )
+					local mode = owner:GetInfoNum( "wire_expression2_theft_protection", 1 )
 					if mode == 0 then return end
-				
 					if mode == 1 then -- prop protection friends list can take your code
 						local friends = owner:CPPIGetFriends()
-						
 						local found = false
 						for i=1,#friends do
 							if friends[i] == ply then
@@ -56,11 +53,9 @@ else
 								break
 							end
 						end
-						
 						if found == false then
 							return false
 						end
-						
 					elseif mode == 2 and owner ~= ply and not ply:IsSuperAdmin() then -- only super admins can take your code
 						return false
 					elseif mode == 3 and owner ~= ply then -- Nobody can take your code
